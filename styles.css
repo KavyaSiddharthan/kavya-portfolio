@@ -1,0 +1,901 @@
+html, body {
+  height: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  height: 100%;
+}
+
+footer {
+  margin-top: auto;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  position: relative;
+  z-index: 10;
+}
+/* styles.css - basic styles for portfolio */
+
+.container {
+  overflow: hidden;
+}
+
+/* Make welcome text font size bigger */
+#welcome-text {
+  font-size: 2.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  animation: colorPulse 3s infinite alternate;
+}
+
+
+
+/* Animated color pulse for thank you popup */
+.star-thankyou-popup.blue-thankyou {
+  animation: colorPulse 2s infinite alternate;
+}
+
+@keyframes colorPulse {
+  0% {
+    color: #00ffff;
+  }
+  50% {
+    color: #ff00ff;
+  }
+  100% {
+    color: #00ffff;
+  }
+}
+
+/* Make nav links font size smaller */
+nav ul li a {
+  font-size: 1rem;
+  animation: colorPulse 4s infinite alternate;
+}
+
+.container svg {
+  --spin-duration: 2000ms;
+  --infinity-duration: 2000ms;
+  animation: spin81213 var(--spin-duration) linear infinite;
+}
+
+.eight {
+  --eight-length-px: 60.84563446044922px;
+  --offset: calc(var(--order) * 5px);
+  animation: infinity8123 var(--infinity-duration) linear infinite;
+  d: path("m5 5a1 1 0 0110 0c0 4-10 6-10 10a1 1 0 0010 0c0-4-10-6-10-10");
+  fill: none;
+  /* Interpolate between aqua blue and rose based on --order */
+  stroke: hsl(calc(180 + (var(--order) * 10)) 80% 60%);
+  stroke-dasharray: 6px calc(var(--eight-length-px) - 6px);
+  stroke-linecap: round;
+  stroke-width: calc(1 - var(--order) / 10);
+}
+
+@keyframes infinity8123 {
+  0% {
+    stroke-dashoffset: calc(var(--eight-length-px) + var(--offset));
+  }
+
+  100% {
+    stroke-dashoffset: var(--offset);
+  }
+}
+
+@keyframes spin81213 {
+  0% {
+    transform: rotate(0);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Chatbot Styles */
+.floating-icons {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  display: block !important;
+  margin-bottom: 0 !important;
+}
+
+.floating-btn {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #00ffff, #ff0080);
+  border-radius: 50%;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 255, 255, 0.3);
+  transition: all 0.3s ease;
+  border: 2px solid #fff;
+  font-size: 24px;
+  color: #000;
+}
+
+.floating-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(0, 255, 255, 0.5);
+}
+
+.floating-btn i {
+  color: #000;
+  font-size: 24px;
+}
+
+.chatbot {
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  width: 350px;
+  height: 350px; /* Reduced height */
+  background: #111;
+  border: 2px solid #00ffff;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+  z-index: 1001;
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  font-size: 12px; /* Reduced font size inside chatbot */
+}
+
+/* Thank You Popup Styles for Like Button */
+.star-thankyou-popup.blue-thankyou {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  background: #2196f3;
+  color: #fff;
+  padding: 18px 36px;
+  border-radius: 16px;
+  box-shadow: 0 6px 32px rgba(33,150,243,0.18);
+  font-size: 1.3em;
+  font-weight: 600;
+  z-index: 9999;
+  opacity: 1;
+  transition: opacity 0.4s, transform 0.4s;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  pointer-events: none;
+}
+.chat-header {
+  background: linear-gradient(135deg, #00ffff, #ff0080);
+  color: #000;
+  padding: 15px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.chat-body {
+  flex: 1;
+  padding: 15px;
+  overflow-y: auto;
+  background: #0a0a0a;
+  color: #fff;
+}
+
+.chat-footer {
+  padding: 15px;
+  background: #111;
+  border-top: 1px solid #00ffff;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.chat-footer input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #00ffff;
+  border-radius: 4px;
+  background: #0a0a0a;
+  color: #fff;
+}
+
+.chat-footer button {
+  padding: 8px 15px;
+  background: #00ffff;
+  color: #000;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.chat-footer button:hover {
+  background: #ff0080;
+}
+
+.notes {
+  padding: 15px;
+  background: #0a0a0a;
+  border-top: 1px solid #00ffff;
+}
+
+.notes-header {
+  color: #00ffff;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.notes input,
+.notes textarea {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 8px;
+  border: 1px solid #00ffff;
+  border-radius: 4px;
+  background: #111;
+  color: #fff;
+}
+
+.notes button {
+  padding: 8px 15px;
+  background: #00ffff;
+  color: #000;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.notes button:hover {
+  background: #ff0080;
+}
+
+/* Website Like & Share Section */
+.website-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 15px;
+  background: #111;
+  border-top: 1px solid #00ffff;
+  margin-top: auto;
+}
+
+.like-btn, .share-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  flex: 1;
+  justify-content: center;
+}
+
+.like-btn {
+  background: #f5f5f5;
+  color: #e63946;
+}
+
+.like-btn .fa-heart {
+  color: #e63946;
+  transition: color 0.3s ease;
+}
+
+.like-btn.liked {
+  background: #e63946;
+  color: white;
+}
+
+.like-btn.liked .fa-heart {
+  color: white;
+}
+
+.share-btn {
+  background: #f5f5f5;
+  color: #457b9d;
+}
+
+.like-count {
+  font-size: 14px;
+  color: #333;
+}
+
+/* Hover effects */
+.like-btn:hover {
+  background: #e63946;
+  color: white;
+  transform: scale(1.05);
+}
+
+.share-btn:hover {
+  background: #457b9d;
+  color: white;
+  transform: scale(1.05);
+}
+
+
+
+/* Asteroid Metroids (Languages Known) Styles */
+.asteroid-container {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  margin-top: 50px;
+  display: none; /* shown only on scroll */
+}
+
+.asteroid {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #ff6600, #552200);
+  box-shadow: 0 0 20px rgba(255, 100, 0, 0.8), 0 0 40px rgba(255, 200, 0, 0.5);
+  cursor: pointer;
+  animation: drift 8s linear infinite alternate;
+}
+
+@keyframes drift {
+  0%   { transform: translate(0, 0) rotate(0deg); }
+  50%  { transform: translate(80px, -60px) rotate(45deg); }
+  100% { transform: translate(-60px, 40px) rotate(90deg); }
+}
+
+.blast-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-shadow: 0 0 10px yellow, 0 0 20px red;
+  opacity: 0;
+  pointer-events: none;
+  animation: blastIn 0.6s forwards;
+}
+
+@keyframes blastIn {
+  0% { transform: translate(-50%, -50%) scale(0.1); opacity: 0; }
+  60% { transform: translate(-50%, -50%) scale(1.3); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+}
+
+.asteroid.break {
+  animation: fallApart 1.5s forwards;
+}
+
+@keyframes fallApart {
+  0%   { opacity: 1; transform: scale(1) rotate(0deg); }
+  50%  { opacity: 0.7; transform: scale(1.3) rotate(90deg) translateY(30px); }
+  100% { opacity: 0; transform: scale(0) rotate(180deg) translateY(200px); }
+}
+
+@keyframes floatAround {
+  0%   { transform: translate(0, 0) rotate(0deg) scale(1); }
+  25%  { transform: translate(30px, -15px) rotate(90deg) scale(1.1); }
+  50%  { transform: translate(-25px, -25px) rotate(180deg) scale(0.9); }
+  75%  { transform: translate(20px, 20px) rotate(270deg) scale(1.2); }
+  100% { transform: translate(0, 0) rotate(360deg) scale(1); }
+}
+
+/* Language Asteroids Styles */
+.language-asteroids {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  margin: 40px 0;
+  display: none; /* shown only on scroll */
+  z-index: 1;
+}
+
+.language-asteroid {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 2;
+  animation: subtleFloat 4s ease-in-out infinite;
+}
+
+.language-asteroid .asteroid-glow {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #00ffff, #0080ff);
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.8), 0 0 30px rgba(0, 128, 255, 0.5);
+  transition: all 0.3s ease;
+}
+
+.language-asteroid:nth-child(2) .asteroid-glow {
+  background: radial-gradient(circle at 30% 30%, #f472b6, #be185d);
+  box-shadow: 0 0 15px rgba(244, 114, 182, 0.8), 0 0 30px rgba(190, 24, 93, 0.5);
+}
+
+.language-asteroid:nth-child(3) .asteroid-glow {
+  background: radial-gradient(circle at 30% 30%, #a855f7, #7c3aed);
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.8), 0 0 30px rgba(124, 58, 237, 0.5);
+}
+
+.language-asteroid:nth-child(1) {
+  left: 10%;
+  top: 50%;
+}
+
+.language-asteroid:nth-child(2) {
+  right: 10%;
+  top: 50%;
+}
+
+
+
+@keyframes subtleFloat {
+  0%   { transform: translateY(0px) rotate(0deg); }
+  50%  { transform: translateY(-10px) rotate(180deg); }
+  100% { transform: translateY(0px) rotate(360deg); }
+}
+
+.language-asteroid:hover .asteroid-glow {
+  transform: scale(1.2);
+  box-shadow: 0 0 25px rgba(0, 255, 255, 1), 0 0 50px rgba(0, 128, 255, 0.8);
+}
+
+.language-asteroid:nth-child(2):hover .asteroid-glow {
+  box-shadow: 0 0 25px rgba(244, 114, 182, 1), 0 0 50px rgba(190, 24, 93, 0.8);
+}
+
+.language-asteroid:nth-child(3):hover .asteroid-glow {
+  box-shadow: 0 0 25px rgba(168, 85, 247, 1), 0 0 30px rgba(124, 58, 237, 0.8);
+}
+
+.language-blast-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-shadow: 0 0 10px #00ffff, 0 0 20px #f472b6, 0 0 30px #a855f7;
+  opacity: 0;
+  pointer-events: none;
+  animation: languageBlastIn 0.8s forwards;
+  z-index: 10;
+}
+
+@keyframes languageBlastIn {
+  0% { transform: translate(-50%, -50%) scale(0.1); opacity: 0; }
+  50% { transform: translate(-50%, -50%) scale(1.5); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+}
+
+.language-asteroid.falling {
+  animation: fallDown 2s forwards;
+}
+
+@keyframes fallDown {
+  0%   {
+    opacity: 1;
+    transform: scale(1);
+  }
+  30%  {
+    opacity: 0.9;
+    transform: scale(1.3) translateY(-20px);
+  }
+  60%  {
+    opacity: 0.6;
+    transform: scale(0.8) translateY(100px);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0) translateY(300px);
+  }
+}
+
+/* Privacy Checkbox Styles */
+.privacy-checkbox-container {
+  margin: 15px 0;
+  padding: 10px;
+  background: rgba(0, 255, 255, 0.05);
+  border: 1px solid rgba(0, 255, 255, 0.2);
+  border-radius: 8px;
+}
+
+.privacy-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: #c0f0f9;
+  line-height: 1.4;
+  user-select: none;
+  position: relative;
+}
+
+.privacy-checkbox {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  position: relative;
+  height: 20px;
+  width: 20px;
+  background-color: #111;
+  border: 2px solid #00ffff;
+  border-radius: 4px;
+  margin-right: 12px;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.checkmark::after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 6px;
+  top: 2px;
+  width: 6px;
+  height: 10px;
+  border: solid #00ffff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.privacy-checkbox:checked ~ .checkmark {
+  background-color: #00ffff;
+  border-color: #00ffff;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+.privacy-checkbox:checked ~ .checkmark::after {
+  display: block;
+}
+
+.privacy-label:hover .checkmark {
+  border-color: #4deeea;
+  box-shadow: 0 0 8px rgba(77, 238, 234, 0.3);
+}
+
+.privacy-info {
+  margin-top: 8px;
+  padding-left: 32px;
+}
+
+.privacy-info small {
+  color: #888 !important;
+  font-style: italic;
+}
+
+/* Gradient Neon Animation for Skills */
+.animate-character {
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 1.2rem;
+  line-height: 1.5;
+  background-image: linear-gradient(
+    -225deg,
+    #0ff 0%,      /* neon cyan */
+    #ff00ff 25%,  /* neon magenta */
+    #00ffff 50%,  /* bright cyan */
+    #ff0080 75%,  /* hot pink */
+    #00ffea 100%  /* aqua neon */
+  );
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: textclip 3s linear infinite;
+  cursor: pointer;
+  transition: transform 0.3s ease, text-shadow 0.3s ease;
+}
+
+/* Text hover effect */
+.animate-character:hover {
+  transform: scale(1.05);
+  text-shadow: 0 0 10px #0ff, 0 0 20px #ff00ff, 0 0 30px #ff0080;
+}
+
+@keyframes textclip {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Section styling (optional for spacing) */
+.skills-section {
+  margin: 5rem 2rem;
+  text-align: center;
+}
+
+.skills-list p {
+  margin: 1rem 0;
+}
+
+/* Skill Brief Section */
+.skill-brief-section {
+  padding: 60px 20px;
+  text-align: center;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative !important;
+  z-index: 10 !important;
+}
+
+.skill-brief-section .section-title {
+  font-size: 2rem;
+  margin-bottom: 30px;
+  background-image: linear-gradient(135deg, #ff3399, #66ccff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.skill-brief-section .brief-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.skill-brief-section .brief {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #222;
+  cursor: pointer;
+  transition: background-image 0.5s ease, color 0.5s ease;
+}
+
+.skill-brief-section .brief:hover {
+  background-image: linear-gradient(135deg, #ff0080, #00ffff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  font-weight: bold;
+}
+
+/* Language Asteroids - reposition to sides of Skill Brief */
+.language-asteroids {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 200px;
+  margin: 0 auto;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Asteroid balls falling animation improved */
+.language-asteroid {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  animation: floatSideways 6s ease-in-out infinite;
+  pointer-events: auto;
+}
+
+@keyframes floatSideways {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+  }
+  50% {
+    transform: translateY(-15px) translateX(10px);
+  }
+}
+
+.blast-particle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: #00ffff;
+  border-radius: 50%;
+  opacity: 1;
+  animation: blastParticleAnim 1s forwards;
+}
+
+@keyframes blastParticleAnim {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--x), var(--y)) scale(0);
+  }
+}
+
+.language-asteroid .asteroid-glow {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #00ffff, #0080ff);
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.8), 0 0 30px rgba(0, 128, 255, 0.5);
+  transition: all 0.3s ease;
+}
+
+.language-asteroid:nth-child(2) .asteroid-glow {
+  background: radial-gradient(circle at 30% 30%, #f472b6, #be185d);
+  box-shadow: 0 0 15px rgba(244, 114, 182, 0.8), 0 0 30px rgba(190, 24, 93, 0.5);
+}
+
+.language-asteroid:nth-child(3) .asteroid-glow {
+  background: radial-gradient(circle at 30% 30%, #a855f7, #7c3aed);
+  box-shadow: 0 0 15px rgba(168, 85, 247, 0.8), 0 0 30px rgba(124, 58, 237, 0.5);
+}
+
+.skill-brief-section .animate-character {
+  display: inline-block;
+  overflow: hidden;
+  border-right: none;
+  white-space: normal;
+  animation: none;
+}
+
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+@keyframes blink {
+  50% { border-color: transparent }
+}
+
+/* Popup Styles */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup-content {
+  background: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+
+}
+
+.popup-content h3 {
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.popup-content p {
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.popup-content button {
+  background: #4deeea;
+  color: #000;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.popup-content button:hover {
+  background: #2ff3f0;
+}
+
+/* Download JSON Button Styles */
+#download-json-btn {
+  background: transparent;
+  border: 2px solid #00ffff;
+  color: #00ffff;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+#download-json-btn:hover {
+  background: #00ffff;
+  color: #0a0a0a;
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+#download-json-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+#download-json-btn:hover::before {
+  left: 100%;
+}
+
+/* Mobile responsive styles */
+@media (max-width: 767px) {
+  /* Hide desktop nav */
+  nav ul.md\\:flex {
+    display: none !important;
+  }
+
+  /* Mobile menu styles */
+  #mobile-menu {
+    position: absolute;
+    top: 3rem;
+    right: 1rem;
+    background-color: #0a0a0a;
+    border: 1px solid #00ffff;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    width: 12rem;
+    box-shadow: 0 0 10px #00ffff;
+    z-index: 50;
+  }
+
+  #mobile-menu li a {
+    display: block;
+    padding: 0.5rem 0;
+    color: #c0f0f9;
+    font-weight: 600;
+  }
+
+  #mobile-menu li a:hover {
+    color: #00ffff;
+    text-decoration: underline;
+  }
+
+  /* Adjust certifications carousel width */
+  .carousel {
+    max-width: 100% !important;
+    padding-bottom: 40px;
+  }
+
+  /* Mobile button layout */
+  #download-json-btn {
+    margin-left: 0;
+    margin-top: 0.5rem;
+    display: block;
+    width: 100%;
+  }
+}
+
