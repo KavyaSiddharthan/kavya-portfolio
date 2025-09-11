@@ -1,18 +1,12 @@
 # Kavya’s Portfolio
+Personal portfolio website Showcasing my journey, skills, and projects.
 
-Personal portfolio website showcasing skills, projects, and experiments in web development.
 
-
-## Preview  
-**Live Demo**: [Your Portfolio Link](https://your-portfolio-link.com)  
-**Screenshot**:  
-```
-+-----------------------------------------------------+
-|                                                     |
-|           Portfolio Preview Image Here             |
-|                                                     |
-+-----------------------------------------------------+
-```
+## Preview
+**Live Demo**: [Kavya’s Portfolio](https://kavyasiddportfolio.onrender.com/)
+**Source Code**: [GitHub Repository](https://github.com/KavyaSiddharthan/kavya-portfolio)
+**Screenshot**:
+![Portfolio Preview](assets/preview image.png)
 
 ---
 
@@ -34,9 +28,9 @@ Personal portfolio website showcasing skills, projects, and experiments in web d
 ---
 
 ## Installation  
-1. **Clone the repository**  
+1. **Clone the repository**
 ```bash
-git clone https://github.com/KavyaSiddharthan/kavya_portfolio.git
+git clone https://github.com/KavyaSiddharthan/kavya-portfolio.git
 ```
 
 2. **Install dependencies**
