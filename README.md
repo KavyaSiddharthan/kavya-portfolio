@@ -3,10 +3,10 @@ Personal portfolio website Showcasing my journey, skills, and projects.
 
 
 ## Preview
-**Live Demo**: [Kavya’s Portfolio](https://kavyasiddportfolio.onrender.com/)
+**Click Here**: [Kavya’s Portfolio](https://kavyasiddportfolio.onrender.com/)
 **Source Code**: [GitHub Repository](https://github.com/KavyaSiddharthan/kavya-portfolio)
 **Screenshot**:
-![Portfolio Preview](assets/preview image.png)
+![Portfolio Preview](assets/previewimage.png)
 
 ---
 
