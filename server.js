@@ -6,7 +6,12 @@ const app = express();
 const http = require('http');
 const server = http.createServer(app);
 const { Server } = require('socket.io');
-const io = new Server(server);
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"]
+  }
+});
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const nodemailer = require('nodemailer');
@@ -65,6 +70,7 @@ io.on('connection', (socket) => {
   // Send current like count on connection
   db.get(`SELECT COUNT(*) as count FROM likes`, (err, row) => {
     if (!err && row) {
+      console.log('Sending initial likeCount to socket', socket.id, ':', row.count);
       socket.emit('likeCount', row.count);
     }
   });
@@ -209,11 +215,11 @@ app.post('/api/like', async (req, res) => {
         const transporter = nodemailer.createTransport({
           host: 'smtp.gmail.com',
           port: 587,
-          secure: false, // true for 465, false for other ports
-        auth: {
-          user: 'kavyasiddharthan07@gmail.com',
-          pass: 'bauw ohir kwsv mqiu'
-        },
+          secure: false,
+          auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS
+          },
           tls: {
             rejectUnauthorized: false
           }

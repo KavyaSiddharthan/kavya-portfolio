@@ -949,7 +949,7 @@ if (localStorage.getItem("asteroidsBlasted") === "true") {
 // Website Like & Share functionality
 
 // Connect to Socket.IO server
-const socket = io();
+const socket = io({ transports: ['polling', 'websocket'] });
 
 // Thank you popup function
 function showThankYouPopup() {

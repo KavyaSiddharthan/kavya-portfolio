@@ -56,6 +56,26 @@ npm start
 
 ---
 
+## Deployment
+
+This project is deployed on Render. To deploy your own instance:
+
+1. Fork this repository
+2. Create a new Web Service on Render
+3. Connect your GitHub repository
+4. Set the following:
+   - **Build Command**: `npm install`
+   - **Start Command**: `npm start`
+5. Add environment variables:
+   - `EMAIL_USER`: Your email for sending notifications
+   - `EMAIL_PASS`: Your email password or app password
+   - `PORT`: (optional, defaults to 3003)
+6. Deploy
+
+**Note**: Since this uses SQLite, data will not persist across deploys on Render's free tier due to ephemeral file system. For production, consider using a persistent database.
+
+---
+
 ## Contact
 
 ## Contact Me
