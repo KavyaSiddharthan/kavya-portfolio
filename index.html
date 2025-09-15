@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
@@ -7,6 +7,10 @@
     Kavya’s Portfolio Website
   </title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Short+Stack&display=swap" rel="stylesheet"/>
   <!-- Material Symbols for Futuristic Icons -->
@@ -193,7 +197,16 @@
       }
     }
     .clip-profile {
-      clip-path: polygon(50% 0%, 86% 10%, 100% 35%, 100% 70%, 83% 94%, 50% 100%, 17% 95%, 0% 70%, 0% 35%, 11% 9%);
+      clip-path: inset(0);
+    }
+
+    @keyframes shapeChange {
+      from {
+        clip-path: polygon(50% 0%, 86% 10%, 100% 35%, 100% 70%, 83% 94%, 50% 100%, 17% 95%, 0% 70%, 0% 35%, 11% 9%);
+      }
+      to {
+        clip-path: inset(0);
+      }
     }
     /* Glittering cyberpunk background with subtle animated particles */
     .background-glitter {
@@ -255,20 +268,18 @@
     .font-friendly {
       font-family: 'Fredoka One', cursive;
     }
-    /* Fancy border-radius shape for photo */
+    /* Vertical rectangle shape for photo */
     .photo-shape {
-      border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+      border-radius: 10px;
       overflow: hidden;
-      box-shadow: 0 0 12px #4deeea88;
-      width: 16rem;
-      height: 16rem;
-      max-width: 320px;
-      max-height: 320px;
+      border: 2px solid #f472b6;
+      width: 200px;
+      height: 300px;
     }
     @media (min-width: 768px) {
       .photo-shape {
         width: 20rem;
-        height: 20rem;
+        height: 30rem;
       }
     }
     /* Text color aqua blue */
@@ -428,7 +439,7 @@
       color: #2ff3f0;
       outline: none;
     }
-    /* Cyberpunk animated background */
+    /* Portfolio animated background */
     #cyber-bg {
       position: fixed;
       inset: 0;
@@ -977,7 +988,16 @@
   /* Contact Section */
   .contact-section {
     text-align: center;
-    padding: 80px 20px;
+    padding: 2rem 20px 40px;
+  }
+
+  form {
+    margin-top: 0;
+    padding-top: 0;
+  }
+
+  .container {
+    min-height: auto;
   }
 
   .contact-section h2 {
@@ -998,12 +1018,13 @@
   }
 
   .contact-form {
-    max-width: 500px;
+    max-width: 300px;
     width: 100%;
     margin: auto;
     background: rgba(255, 255, 255, 0.12);
     padding: 25px;
-    border-radius: 15px;
+    border-radius: 0px;
+    height: 400px;
     backdrop-filter: blur(12px);
     animation: slideUp 1.5s ease-out;
     display: flex;
@@ -1085,6 +1106,7 @@
   footer a:hover::after {
     width: 100%;
   }
+
   </style>
   <script src="script.js" defer></script>
 </head>
@@ -1176,7 +1198,7 @@
   <!-- Main Content -->
   <main id="main-content" class="main-content" role="main" tabindex="-1" style="display: none;">
   <!-- Hero Section -->
-  <section id="welcome" aria-label="Welcome Section" class="relative z-10 flex flex-col md:flex-row max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 items-center justify-between py-10 md:py-20 min-h-[80vh]">
+  <section id="welcome" aria-label="Welcome Section" class="relative z-10 flex flex-col max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 items-center justify-center py-10 md:py-20 min-h-[80vh]">
     <div class="max-w-xl text-center text-white md:pr-6">
       <p class="text-cyan-400 text-lg mb-2">
         Hi, I'm
@@ -1209,17 +1231,19 @@
           </button>
         </div>
       </div>
-        <button id="contact-me-btn" class="border border-pink-400 text-pink-400 text-sm font-semibold px-6 py-2 rounded hover:bg-pink-400 hover:text-black transition" type="button">
-          CONTACT ME
-        </button>
+        <a id="source-code-btn" 
+           href="https://github.com/KavyaSiddharthan/kavya-portfolio" 
+           target="_blank" 
+           class="border border-pink-400 text-pink-400 text-sm font-semibold px-6 py-2 rounded hover:bg-pink-400 hover:text-black transition inline-block text-center">
+           REPO ↗
+        </a>
       </div>
     </div>
-    <div class="mt-12 md:mt-0 flex justify-center">
-        <div class="profile-glow rounded border border-cyan-400 p-1 w-96 h-96 overflow-hidden clip-profile relative">
-          <div class="profile-glow-bg absolute inset-0 rounded-lg -z-10"></div>
-          <img alt="Profile photo of Kavya S, a young woman with long curly black hair wearing a blue patterned top, smiling with a natural outdoor background" class="w-full h-full object-cover relative z-10 profile-img" height="384" loading="lazy" src="assets/Kavya S.jpg" width="384"/>
-        </div>
-    </div>
+    <div class="mt-12 md:mt-12 flex justify-center">
+       <div class="profile-glow rounded border border-cyan-400 p-1 w-80 h-80 overflow-hidden clip-profile relative">
+       <div class="profile-glow-bg absolute inset-0 rounded-lg -z-10"></div>
+          <img alt="Profile photo of Kavya S, a young woman with long curly black hair wearing a blue patterned top, smiling with a natural outdoor background" class="w-full h-full object-cover relative z-10 profile-img" loading="lazy" src="assets/Kavya S.jpg" />
+       </div>
   </section>
 
     <!-- About Section -->
@@ -1240,11 +1264,12 @@
       </div>
       <!-- Left side - Photo and Name -->
       <section aria-labelledby="name-btn" class="md:w-1/2 w-full flex flex-col items-center justify-center relative z-10">
-        <div class="photo-shape overflow-hidden mb-6">
-          <img alt="About Me Image" class="w-full h-full object-cover about-img" height="320" loading="lazy" src="assets/profile-intro-thumbnail.png.jpg" width="320"/>
-        </div>
-        <button aria-label="Open LinkedIn QR code" class="aqua-btn px-6 py-2 rounded-full text-lg font-semibold" id="name-btn" type="button">
-          Kavya Siddharthan <i class="fa-brands fa-linkedin" style="vertical-align:middle;"></i>
+       <div class="photo-shape overflow-hidden mb-6" style="width: 300px; height: 340px; margin-left: -10px;">
+          <img alt="About Me Image" class="w-full h-full object-cover about-img" loading="lazy" src="assets/profile-intro-thumbnail.png.jpg" />
+       </div>
+
+        <button aria-label="Open LinkedIn QR code" class="aqua-btn px-2 py-0.5 rounded-full text-[10px] font-medium" id="name-btn" type="button" style="margin-left: -30px;">
+          Kavya S <i class="fa-brands fa-linkedin" style="vertical-align: middle;"></i>
         </button>
       </section>
       <!-- Right side - About Cards -->
@@ -1290,7 +1315,7 @@
           <h3 class="font-friendly text-2xl mb-4 aqua-text" id="linkedin-modal-title">
             LinkedIn QR Code
           </h3>
-          <img alt="QR code for Kavya Siddharthan's LinkedIn profile, aqua blue on dark background" height="250" loading="lazy" src="assets/linkidinQR.jpg" width="250"/>
+          <img alt="QR code for Kavya Siddharthan's LinkedIn profile, aqua blue on dark background" height="250" loading="lazy" src="assets/linkidinQR.jpg" width="200"/>
         </div>
       </div>
       <!-- Video Popup Modal -->
@@ -1325,8 +1350,8 @@
     <!-- Bottom Row - 4 Cards -->
   <div class="skill-card" style="--i:4;"><i class="fa-brands fa-js skill-icon"></i><div class="skill-name">JavaScript</div><div class="skill-points"><div class="skill-point"></div><div class="skill-point"></div><div class="skill-point"></div><div class="skill-point"></div><div class="skill-point"></div></div></div>
   <div class="skill-card" style="--i:5;"><i class="fa-brands fa-react skill-icon"></i><div class="skill-name">React</div><div class="skill-points"><div class="skill-point"></div><div class="skill-point"></div><div class="skill-point"></div><div class="skill-point"></div><div class="skill-point"></div></div></div>
-  <div class="skill-card" style="--i:6;"><i class="fa-solid fa-pencil-ruler skill-icon"></i><div class="skill-name">UI/UX</div><div class="skill-points"><div class="skill-point"></div><div class="skill-point"></div><div class="skill-point"></div><div class="skill-point"></div><div class="skill-point"></div></div></div>
-  <div class="skill-card" style="--i:7;"><i class="fa-brands fa-git-alt skill-icon"></i><div class="skill-name">Git</div><div class="skill-points"><div class="skill-point"></div><div class="skill-point"></div><div class="skill-point"></div><div class="skill-point"></div><div class="skill-point"></div></div></div>
+  <div class="skill-card" style="--i:6;"><i class="fa-brands fa-aws skill-icon"></i><div class="skill-name">AWS</div><div class="skill-points"><div class="skill-point"></div><div class="skill-point"></div><div class="skill-point"></div><div class="skill-point"></div><div class="skill-point"></div></div></div>
+  <div class="skill-card" style="--i:7;"><i class="fa-brands fa-git-alt skill-icon"></i><div class="skill-name">Git/Github</div><div class="skill-points"><div class="skill-point"></div><div class="skill-point"></div><div class="skill-point"></div><div class="skill-point"></div><div class="skill-point"></div></div></div>
       </div>
     </section>
     <!-- Skill Brief Section -->
@@ -1335,7 +1360,7 @@
       <div class="brief-list">
         <p class="brief animate-character">Java, SQL, Flutter/Dart – applied in building and integrating scalable applications through backend and app development.</p>
         <p class="brief animate-character">HTML5, CSS3, JavaScript, React – used for developing responsive, interactive, and modern web interfaces.</p>
-        <p class="brief animate-character">UI/UX, Git – practiced in designing smooth user experiences and managing version-controlled collaboration.</p>
+        <p class="brief animate-character">AWS, Git – utilized in cloud deployment and version control for efficient development workflows.</p>
       </div>
     <div class="language-asteroids" id="language-asteroids">
       <div class="language-asteroid" data-lang="தமிழ்">
@@ -1352,7 +1377,7 @@
 
 
     <!-- Education Section -->
-    <section class="education-section" aria-label="Education">
+<section id="education" class="education-section" aria-label="Education">
       <h2>Education</h2>
       <div class="education-container">
 
@@ -1378,7 +1403,7 @@
     </section>
 
     <!-- Experience Section -->
-    <section id="experience" class="experience-section" style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
+<section id="work-experience" class="experience-section" style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
       <h2>Work Experience</h2>
       <div class="single-experience-card animated-gradient" style="background: linear-gradient(135deg, #111 0%, #1a1a2e 50%, #16213e 100%); border: 2px solid #00ffff; border-radius: 12px; padding: 1.5rem; max-width: 320px; text-align: center; box-shadow: 0 0 20px #00ffff; font-size: 0.9rem; transition: transform 0.3s ease, box-shadow 0.3s ease;">
         <i class="fa-solid fa-briefcase" style="font-size: 2.5rem; color: #00ffff; margin-bottom: 1rem; transition: transform 0.3s ease;"></i>
@@ -1623,24 +1648,7 @@
       }
     </script>
 
-    <!-- Experience Section -->
-    <section id="experience" aria-label="Work Experience">
-      <h2 class="section-title">Experience</h2>
-      <div class="experience-cards container">
-        <!-- Expandable cards for roles -->
-        <article class="experience-card" tabindex="0" aria-expanded="false" aria-controls="exp1-details" id="exp1">
-          <h3>Software Developer - ABC Corp</h3>
-          <p>Jan 2021 - Present</p>
-          <div class="experience-details" id="exp1-details" hidden>
-            <ul>
-              <li>Developed web applications using Java, SQL, and modern web technologies.</li>
-              <li>Collaborated with cross-functional teams to deliver high-quality software.</li>
-            </ul>
-          </div>
-        </article>
-        <!-- Add more experience cards -->
-      </div>
-    </section>
+
 
     <!-- Cyberpunk Marquee Banner -->
     <div class="cyberpunk-marquee">
@@ -1795,16 +1803,7 @@
   </div>
 
 
-</div> <!-- close carousel-wrapper -->
-
-<!-- Swipe Indicators: moved below the certifications section -->
-<div class="swipe-indicators" style="margin-top: 2rem; display: flex; justify-content: center;">
-  <span class="indicator active" onclick="scrollToCard(0)"></span>
-  <span class="indicator" onclick="scrollToCard(1)"></span>
-  <span class="indicator" onclick="scrollToCard(2)"></span>
-  <span class="indicator" onclick="scrollToCard(3)"></span>
-  <span class="indicator" onclick="scrollToCard(4)"></span>
-</div>
+  </div> <!-- close carousel-wrapper -->
 
   <!-- LinkedIn Button -->
   <a href="https://www.linkedin.com/in/kavya-siddharthan/details/certifications/"
@@ -1814,13 +1813,24 @@
   </a>
 </section>
 
+<!-- Website Like & Share Section -->
+<section class="website-actions" aria-label="Website Like and Share">
+  <button class="like-btn" onclick="toggleLike(this)">
+    <i class="fas fa-heart"></i> Like
+    <span class="like-count">0</span>
+  </button>
+  <button class="share-btn" onclick="shareWebsite()">
+    <i class="fas fa-share-alt"></i> Share
+  </button>
+</section>
+
 <style>
   .cert-section {
     padding: 60px 20px;
     text-align: center;
     background: #0a0a0a;
     color: #fff;
-    margin-bottom: 80px; /* Add space to prevent overlap with contact section */
+    margin-bottom: 0px; /* Reduced space to decrease gap with contact section */
   }
 
   .cert-section h2 {
@@ -1842,8 +1852,9 @@
     overflow-x: scroll; /* Changed to scroll to always show scrollbar */
     scroll-behavior: smooth;
     gap: 20px;
-    max-width: 460px; /* Adjusted for bigger card */
+    max-width: 420px; /* Adjusted for one card visible */
     padding-bottom: 60px; /* Increased padding for scrollbar visibility below */
+    scroll-snap-type: x mandatory;
   }
   /* Scrollbar styles for WebKit browsers */
   .carousel::-webkit-scrollbar {
@@ -1869,22 +1880,24 @@
   }
 
   .carousel-card {
-    width: 420px;
-    height: 380px; /* Bigger square shape */
-    background: rgba(255,255,255,0.05); /* Glass card background */
-    border-radius: 20px; /* Rounded corners */
-    padding: 25px;
-    backdrop-filter: blur(12px);
-    box-shadow: 0 0 12px rgba(0,255,255,0.4);
+    position: relative;
+    width: 400px;
+    height: 350px;
+    margin: 20px 0;
+    background: transparent;
+    border-radius: 12px;
+    color: white;
     text-align: center;
+    text-indent: .1em;
     flex-shrink: 0;
     transition: transform 0.3s;
-    border: 3px solid #ff0080;
+    border: 2px solid #ff0080;
     overflow: hidden; /* Prevent overlay */
     display: flex;
     flex-direction: column;
     justify-content: center;
     position: relative;
+    padding: 20px; /* Adjusted padding for proper spacing inside */
   }
   .carousel-card:hover {
     transform: translateY(-5px);
@@ -1894,18 +1907,26 @@
 
   .carousel-card img {
     width: 100%;
-    border-radius: 12px;
-    margin-bottom: 12px;
+    height: auto;
+    border-radius: 15px;
+    margin-bottom: 8px;
+    padding: 10px;
+    box-sizing: border-box;
+    transition: transform 0.3s ease;
+  }
+
+  .carousel-card img:hover {
+    transform: scale(1.05);
   }
 
   .carousel-card h3 {
     margin: 10px 0 5px;
-    font-size: 18px;
+    font-size: 14px;
     color: #fff;
   }
 
   .carousel-card p {
-    font-size: 14px;
+    font-size: 11px;
     color: #ccc;
   }
 
@@ -2057,13 +2078,7 @@
 
 
 
-<!-- GitHub Arrow Box between Certifications and Contact -->
-<div id="github-arrow-box" style="display:flex; justify-content:center; align-items:center; margin: 1.2rem 0; z-index: 1000; position: relative;">
-  <a id="github-arrow-link" href="https://github.com/KavyaSiddharthan/kavya-portfolio" style="background:#0a0a0a; border:2px solid #0af0fa; border-radius:12px; padding:0.7rem 1.2rem; box-shadow:0 2px 12px #0af0fa33; cursor:pointer; display:flex; align-items:center; gap:0.5rem; transition:background 0.2s; text-decoration:none;" aria-label="Visit Kavya's GitHub Profile">
-    <span class="material-symbols-outlined" style="font-size:2.2rem; color:#0af0fa;">arrow_outward</span>
-    <span style="color:#0af0fa; font-weight:bold;">Source Code</span>
-  </a>
-</div>
+
 
     <!-- Animated Background -->
     <div class="background"></div>
@@ -2071,7 +2086,7 @@
     <!-- Contact Section -->
     <section class="contact-section" id="contact">
       <h2>Contact Me</h2>
-      <form class="contact-form" id="contact-form">
+      <form class="contact-form reveal" id="contact-form">
         <input type="text" name="name" placeholder="Your Name" required>
         <input type="email" name="email" placeholder="Your Email" required>
         <textarea name="message" rows="4" placeholder="Your Message" required></textarea>
@@ -2082,108 +2097,45 @@
 
 
     <!-- Footer -->
-    <footer>
-      <p>© 2025 Kavya S</p>
-      <p>
-        <a href="http://github.com/KavyaSiddharthan" target="_blank">GitHub</a> |
-        <a href="https://www.linkedin.com/in/kavya-siddharthan" target="_blank">LinkedIn</a>
-      </p>
-      <p style="margin-top:1rem; color:#a0e7ef; font-size:1rem;">Built this minimal portfolio just for fun and a bit of experimentation.</p>
-    </footer>
-
-  <style>
-  .cyberpunk-marquee {
-    width: 820px;
-    max-width: 90vw;
-    margin: 40px auto;
-    overflow: hidden;
-    background: rgba(0, 0, 0, 0.85);
-    border: 2px solid #ff00ff;
-    /* Removed box-shadow for no glowy effect */
-    padding: 8px 0;
-    border-radius: 12px;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .cyberpunk-marquee p {
-    display: inline-block;
-    white-space: nowrap;
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: #00ffff;
-    /* Removed text-shadow for no glowy effect */
-    animation: marquee 12s linear infinite;
-  }
-
-  @keyframes marquee {
-    from {
-      transform: translateX(100%);
-    }
-    to {
-      transform: translateX(-100%);
-    }
-  }
-  </style>
-  </main>
-
-  <style>
-    /* Force-hide chatbot icon and wrapper until loading is finished */
-    #chatbot-float-wrap, #chatbot-icon {
-      display: none !important;
-    }
-  </style>
-  <!-- Chatbot and Floating Button moved to just before </body> for visibility -->
   </main>
 
     <!-- AI Chatbot with Notes & Stars UI -->
     <div class="floating-icons" style="display:none;" id="chatbot-float-wrap">
-    <div id="chatbot-icon" class="floating-btn" style="display:none; align-items:center; justify-content:center;">
-      <!-- New chatbot icon: a chat bubble SVG -->
-      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="#000" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-        <path d="M20 2H4a2 2 0 0 0-2 2v16l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/>
-      </svg>
-    </div>
-    </div>
-
-
-  <!-- Notes Window -->
-  <div id="chatbot-window" class="chatbot notes-only" aria-hidden="true" style="display:none; flex-direction: column;">
-    <div class="chat-header">
-      Send Me a Note <span id="close-chat" style="cursor:pointer;">✖</span>
-    </div>
-
-    <!-- Notes Section -->
-    <div class="notes">
-      <div class="notes-header">
-        <i class="fas fa-sticky-note" style="margin-right: 8px;"></i>
-        Leave a Note
-      </div>
-
-      <form id="note-form" action="https://formspree.io/f/mnnqyrgg" method="POST">
-        <input type="text" name="name" id="note-sender" placeholder="Your Name" required />
-        <input type="email" name="email" id="note-email" placeholder="Your Email" required />
-        <textarea name="message" id="note-input" placeholder="Write your note..." required></textarea>
-        <button type="submit" id="send-note-btn">
-          <i class="fas fa-paper-plane"></i> Send Note
-        </button>
-      </form>
-
-      <!-- Website Like & Share Section -->
-      <div class="website-actions">
-        <button class="like-btn" onclick="toggleLike(this)">
-          <i class="fas fa-heart"></i> Like
-          <span class="like-count">0</span>
-        </button>
-        <button class="share-btn" onclick="shareWebsite()">
-          <i class="fas fa-share-alt"></i> Share
-        </button>
+      <div id="chatbot-icon" class="floating-btn" style="display:none; align-items:center; justify-content:center;">
+        <!-- New chatbot icon: a chat bubble SVG -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="#000" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M20 2H4a2 2 0 0 0-2 2v16l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/>
+        </svg>
       </div>
     </div>
-  </div>
-    <script>
+
+    <!-- Notes Window -->
+    <div id="chatbot-window" class="chatbot notes-only" aria-hidden="true" style="display:none; flex-direction: column;">
+      <div class="chat-header">
+        Send Me a Note <span id="close-chat" style="cursor:pointer;">✖</span>
+      </div>
+
+      <!-- Notes Section -->
+      <div class="notes">
+        <div class="notes-header">
+          <i class="fas fa-sticky-note" style="margin-right: 8px;"></i>
+          Leave a Note
+        </div>
+
+        <form id="note-form" action="https://formspree.io/f/mnnqyrgg" method="POST">
+          <input type="text" name="name" id="note-sender" placeholder="Your Name" required />
+          <input type="email" name="email" id="note-email" placeholder="Your Email" required />
+          <textarea name="message" id="note-input" placeholder="Write your note..." required></textarea>
+          <button type="submit" id="send-note-btn">
+            <i class="fas fa-paper-plane"></i> Send Note
+          </button>
+        </form>
+
+      </div>
+    </div>
+
+
+  <script>
     document.addEventListener('DOMContentLoaded', function() {
       // Chatbot elements
       const chatbotFloatWrap = document.getElementById('chatbot-float-wrap');
@@ -2192,12 +2144,6 @@
       const closeChat = document.getElementById('close-chat');
 
 
-
-      // Force show chatbot after 2 seconds as fallback
-      setTimeout(() => {
-        if (chatbotFloatWrap) chatbotFloatWrap.style.display = 'block';
-        if (chatbotIcon) chatbotIcon.style.display = 'flex';
-      }, 2000);
 
       if (chatbotIcon && chatbotWindow) {
         // Make chatbot icon draggable
@@ -2233,15 +2179,26 @@
         // Navigation: open chatbot if #chatbot in URL
         function openChatbotFromHash() {
           if (window.location.hash === '#chatbot') {
-            if (chatbotFloatWrap) chatbotFloatWrap.style.display = 'block';
-            chatbotWindow.setAttribute('aria-hidden', 'false');
-            chatbotWindow.style.display = 'block';
-            chatbotWindow.style.zIndex = 2147483647;
-            chatbotWindow.focus && chatbotWindow.focus();
+            // Wait for loading to complete before showing chatbot
+            const checkLoading = () => {
+              const loadingScreen = document.getElementById('loading-screen');
+              if (loadingScreen && loadingScreen.style.display === 'none') {
+                if (chatbotFloatWrap) chatbotFloatWrap.style.display = 'block';
+                chatbotWindow.setAttribute('aria-hidden', 'false');
+                chatbotWindow.style.display = 'block';
+                chatbotWindow.style.zIndex = 2147483647;
+                chatbotWindow.focus && chatbotWindow.focus();
+              } else {
+                setTimeout(checkLoading, 100);
+              }
+            };
+            checkLoading();
           }
         }
         window.addEventListener('hashchange', openChatbotFromHash);
         openChatbotFromHash();
+
+
       }
       if (closeChat && chatbotWindow) {
         closeChat.addEventListener("click", () => {
@@ -2270,13 +2227,15 @@
         });
       }
     });
-    </script>
-
-
-
-
-
-
   </script>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2025 Kavya S</p>
+    <p>
+      <a href="http://github.com/KavyaSiddharthan" target="_blank">GitHub</a> |
+      <a href="https://www.linkedin.com/in/kavya-siddharthan" target="_blank">LinkedIn</a>
+    </p>
+    <p style="margin-top:1rem; color:#a0e7ef; font-size:1rem;">Built this minimal portfolio just for fun and a bit of experimentation.</p>
 </body>
 </html>

@@ -6,7 +6,7 @@ Personal portfolio website Showcasing my journey, skills, and projects.
 **Click Here**: [Kavya’s Portfolio](https://kavyasiddportfolio.onrender.com/)
 **Source Code**: [GitHub Repository](https://github.com/KavyaSiddharthan/kavya-portfolio)
 **Screenshot**:
-![Portfolio Preview](assets/previewimage.png)
+<img src="assets/previewimage.png" alt="Portfolio Preview" width="500">
 
 ---
 
@@ -15,8 +15,7 @@ Personal portfolio website Showcasing my journey, skills, and projects.
 - Interactive about cards  
 - Animated skills section  
 - Project video gallery  
-- Contact form with backend  
-- Draggable chatbot  
+- Contact form with backend    
 
 ---
 
@@ -57,11 +56,12 @@ npm start
 
 ## Contact
 
-* [LinkedIn](https://www.linkedin.com/in/kavya-siddharthan)  
-* [GitHub](https://github.com/KavyaSiddharthan)  
-* Email: **[kavyasiddharthan7@gmail.com](mailto:kavyasiddharthan7@gmail.com)**
+## Contact Me
 
----
+* [LinkedIn](https://www.linkedin.com/in/kavya-siddharthan) – Connect
+* [GitHub](https://github.com/KavyaSiddharthan) – See my projects
+* Email: **[kavyasiddharthan7@gmail.com](mailto:kavyasiddharthan7@gmail.com)** – Ping me
+
 
 ## License
 

@@ -1,50 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Loading screen elements
-    const loadingScreen = document.getElementById('loading-screen');
-    const mainContent = document.getElementById('main-content');
-    const loadingText = document.getElementById('loading-text');
-
-    // Messages to show during loading
-    const messages = [
-        'INITIALIZING SYSTEM...',
-        'COMPILING SKILLS...',
-        'DEPLOYING AI ASSISTANT...',
-        'LOADING PORTFOLIO...',
-        'SYSTEM READY!'
-    ];
-
-    let currentIndex = 0;
-
-    function showNextMessage() {
-        if (currentIndex < messages.length) {
-            if (loadingText) loadingText.textContent = messages[currentIndex];
-            currentIndex++;
-            setTimeout(showNextMessage, 800);
-        } else {
-            finishLoading();
-        }
-    }
-
-    function finishLoading() {
-        if (loadingScreen) loadingScreen.style.display = 'none';
-        if (mainContent) {
-            mainContent.style.display = 'block';
-            mainContent.classList.add('loaded');
-        }
-        // Show chatbot icon and wrapper
-        const chatbotFloatWrap = document.getElementById('chatbot-float-wrap');
-        const chatbotIcon = document.getElementById('chatbot-icon');
-        if (chatbotFloatWrap) chatbotFloatWrap.style.display = 'block';
-        if (chatbotIcon) chatbotIcon.style.display = 'flex';
-    }
-
-    showNextMessage();
-
-    // Fallback: force finish loading after 8 seconds
-    setTimeout(() => {
-        finishLoading();
-    }, 8000);
-
     // Existing GitHub arrow click handler
     const githubArrow = document.getElementById('github-arrow-link');
     if (githubArrow) {
@@ -53,8 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
             window.open('https://github.com/KavyaSiddharthan', '_blank');
         });
     }
-});
- document.addEventListener('DOMContentLoaded', () => {
+
     const weatherGithub = document.getElementById('weather-github');
     if (weatherGithub) {
         weatherGithub.addEventListener('click', (e) => {
@@ -62,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Coming soon!');
         });
     }
+
     const contactMeBtn = document.getElementById('contact-me-btn');
     const contactSection = document.getElementById('contact');
     if (contactMeBtn && contactSection) {
@@ -69,6 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
             contactSection.scrollIntoView({ behavior: 'smooth' });
         });
     }
+
     // Toggle welcome text on click
     const welcomeText = document.getElementById('welcome-text');
     if (welcomeText) {
@@ -80,15 +35,25 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // Footer show/hide on scroll
+    const footer = document.querySelector('footer');
+    function checkFooterVisibility() {
+        if (!footer) return;
+        const showThreshold = 200; // px from top to start showing footer
+        if (window.scrollY > showThreshold) {
+            footer.style.display = 'block';
+        } else {
+            footer.style.display = 'none';
+        }
+    }
+    window.addEventListener('scroll', checkFooterVisibility);
+    // Initial check
+    checkFooterVisibility();
 });
- // ==============================
- // Cleaned and balanced full script (from user's input)
- // - Merged DOMContentLoaded blocks
- // - Fixed timer interval storage/cleanup
- // - Ensured single initialization and balanced braces/parentheses
- // ==============================
- // Loading screen functionality - Simplified version
- function initLoadingScreen() {
+
+// Loading screen functionality - Simplified and unified
+function initLoadingScreen() {
     const loadingScreen = document.getElementById('loading-screen');
     const loadingText = document.getElementById('loading-text');
     const mainContent = document.getElementById('main-content');
@@ -132,20 +97,6 @@ document.addEventListener('DOMContentLoaded', () => {
         mainContent.style.display = 'block';
         mainContent.classList.add('loaded');
 
-        // Remove force-hide CSS for chatbot
-        const styleSheets = document.querySelectorAll('style');
-        styleSheets.forEach(style => {
-            if (style.textContent.includes('#chatbot-float-wrap, #chatbot-icon')) {
-                style.parentNode.removeChild(style);
-            }
-        });
-
-        // Show chatbot
-        const chatbotFloatWrap = document.getElementById('chatbot-float-wrap');
-        const chatbotIcon = document.getElementById('chatbot-icon');
-        if (chatbotFloatWrap) chatbotFloatWrap.style.display = 'block';
-        if (chatbotIcon) chatbotIcon.style.display = 'flex';
-
         initInteractiveFeatures();
         console.log('Loading complete');
     }
@@ -160,9 +111,10 @@ document.addEventListener('DOMContentLoaded', () => {
             finishLoading();
         }
     }, 8000);
- }
+}
+
 window.addEventListener('load', () => {
-   initLoadingScreen();
+    initLoadingScreen();
 });
 
 // Mobile menu toggle
@@ -338,16 +290,7 @@ if (downloadJsonBtn) {
     URL.revokeObjectURL(url);
   });
 }
- // Fallback: Force hide loading screen after 10 seconds if not already hidden
- setTimeout(() => {
-    try {
-        if (loadingScreen && loadingScreen.loadingScreen && loadingScreen.loadingScreen.style.display !== 'none') {
-            loadingScreen.finishLoading();
-        }
-    } catch (e) {
-        // silent fallback
-    }
- }, 10000);
+
  // Hero animations: fade-in, glitch, 3D avatar shatter/reassemble
  function initHeroAnimations() {
     const heroTitle = document.querySelector('.hero-title');
@@ -991,7 +934,7 @@ if (localStorage.getItem("asteroidsBlasted") === "true") {
 // Thank you popup function
 function showThankYouPopup() {
   let popup = document.createElement('div');
-  popup.innerHTML = '<span style="font-size:1.5em;vertical-align:middle;">💓</span> <span style="vertical-align:middle;">Thank you!</span>';
+  popup.innerHTML = '<span style="font-size:1.5em;vertical-align:middle;">♥</span> <span style="vertical-align:middle;">Thank you!</span>';
   popup.className = 'star-thankyou-popup blue-thankyou';
   document.body.appendChild(popup);
   setTimeout(() => {
@@ -1107,7 +1050,7 @@ function showBigHeartAnimation(button) {
 }
 
 function shareWebsite() {
-  const url = window.location.href; // your site link
+  const url = "https://kavyasiddportfolio.onrender.com"; // your site link
   navigator.clipboard.writeText(url).then(() => {
     alert("Website link copied! 🎉");
   });
