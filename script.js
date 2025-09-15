@@ -13,6 +13,14 @@ document.addEventListener('DOMContentLoaded', () => {
         weatherGithub.addEventListener('click', (e) => {
             e.preventDefault();
             alert('Coming soon!');
+            // Hide the description text after clicking
+            const projectCard = weatherGithub.closest('.project-card');
+            if (projectCard) {
+                const description = projectCard.querySelector('.project-info p');
+                if (description) {
+                    description.style.display = 'none';
+                }
+            }
         });
     }
 
@@ -334,7 +342,7 @@ if (downloadJsonBtn) {
     });
  }
  // Contact form loading and notification
- function initContactForm() {
+function initContactForm() {
     const contactForm = document.querySelector('.contact-form');
     if (!contactForm) return;
     const submitButton = contactForm.querySelector('button[type="submit"]');
@@ -346,12 +354,12 @@ if (downloadJsonBtn) {
             email: formData.get('email'),
             message: formData.get('message')
         };
-        // Show loading and update button text
-        showLoading();
+        // Optimistic UI update: immediately update button text and disable
         if (submitButton) {
-            submitButton.textContent = 'Sending...';
+            submitButton.textContent = 'Message Sent';
             submitButton.disabled = true;
         }
+        showLoading();
         try {
             const response = await fetch('/api/contact', {
                 method: 'POST',
@@ -363,27 +371,17 @@ if (downloadJsonBtn) {
             const result = await response.json();
             if (response.ok) {
                 hideLoading();
-                if (submitButton) {
-                    submitButton.textContent = 'Message Sent';
-                    submitButton.disabled = true;
-                }
                 contactForm.reset();
-                // Reset button after 3 seconds
-                setTimeout(() => {
-                    if (submitButton) {
-                        submitButton.textContent = 'Send Message';
-                        submitButton.disabled = false;
-                    }
-                }, 3000);
+                // Keep button disabled and text as "Message Sent"
             } else {
                 throw new Error(result.error || 'Form submission failed');
             }
         } catch (error) {
             hideLoading();
             if (submitButton) {
-                submitButton.textContent = 'Message Sent Failed';
-                submitButton.disabled = true;
-                // Reset button after 3 seconds
+                submitButton.textContent = 'Failed to Send';
+                submitButton.disabled = false;
+                // Optionally reset button after 3 seconds
                 setTimeout(() => {
                     if (submitButton) {
                         submitButton.textContent = 'Send Message';
@@ -393,15 +391,14 @@ if (downloadJsonBtn) {
             }
         }
     });
- }
- function showLoading() {
+}
+function showLoading() {
     // Create loading overlay
     const loadingOverlay = document.createElement('div');
     loadingOverlay.id = 'form-loading-overlay';
     loadingOverlay.innerHTML = `
         <div class="loading-container">
             <div class="loading-spinner"></div>
-            <div class="loading-text">Submitting form...</div>
             <div class="loading-timer">0s</div>
         </div>
     `;
@@ -968,6 +965,28 @@ async function loadLikeCount() {
 }
 
 async function toggleLike(button) {
+  // Optimistic update: increment likes and update UI immediately
+  likes++;
+  if (likeCount) {
+    likeCount.innerText = likes;
+  }
+  button.classList.add("liked");
+  // Remove bottom margin/padding to avoid space after like
+  button.style.marginBottom = '0';
+  button.style.paddingBottom = '0';
+
+  // Update heart icon color
+  const heartIcon = button.querySelector('.fa-heart');
+  if (heartIcon) {
+    heartIcon.style.color = 'white';
+  }
+
+  // Show thank you popup on like
+  showThankYouPopup();
+
+  // Show big heart animation like Instagram
+  showBigHeartAnimation(button);
+
   try {
     const response = await fetch('/api/like', {
       method: 'POST',
@@ -976,53 +995,35 @@ async function toggleLike(button) {
       }
     });
     const data = await response.json();
+    // Update with server response if different
     likes = data.likes;
     if (likeCount) {
       likeCount.innerText = likes;
     }
-    button.classList.add("liked");
-
-    // Update heart icon color
-    const heartIcon = button.querySelector('.fa-heart');
-    if (heartIcon) {
-      heartIcon.style.color = 'white';
-    }
-
-    // Show thank you popup on like
-    showThankYouPopup();
-
-    // Show big heart animation like Instagram
-    showBigHeartAnimation(button);
   } catch (error) {
     console.error('Error toggling like:', error);
-    // Fallback to localStorage
-    if (button.classList.contains("liked")) {
-      likes--;
-      button.classList.remove("liked");
-    } else {
-      likes++;
-      button.classList.add("liked");
-    }
+    // Revert optimistic update on error
+    likes--;
     if (likeCount) {
       likeCount.innerText = likes;
     }
-    localStorage.setItem("websiteLikes", likes);
-
-    // Update heart icon color
-    const heartIcon = button.querySelector('.fa-heart');
+    button.classList.remove("liked");
     if (heartIcon) {
-      if (button.classList.contains("liked")) {
-        heartIcon.style.color = 'white';
-      } else {
-        heartIcon.style.color = '#e63946';
-      }
+      heartIcon.style.color = '#e63946';
     }
-
-    // Show thank you popup on like
-    showThankYouPopup();
-
-    // Show big heart animation like Instagram
-    showBigHeartAnimation(button);
+    // Show error message
+    const errorMessage = document.createElement('div');
+    errorMessage.innerHTML = `
+      <div style="position: fixed; top: 20px; right: 20px; background: #ff4444;
+                  color: #fff; padding: 15px 20px; border-radius: 8px;
+                  box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 10000;
+                  font-weight: bold; max-width: 300px;">
+        <i class="fas fa-exclamation-circle" style="margin-right: 8px;"></i>
+        Failed to like. Please try again.
+      </div>
+    `;
+    document.body.appendChild(errorMessage);
+    setTimeout(() => errorMessage.remove(), 4000);
   }
 }
 

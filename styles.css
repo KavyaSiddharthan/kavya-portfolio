@@ -23,6 +23,11 @@ footer {
   margin: 0; /* No margin to ensure it's the end */
 }
 
+.like-btn.liked {
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
 
 /* styles.css - basic styles for portfolio */
 
