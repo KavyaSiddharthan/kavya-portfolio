@@ -1,12 +1,18 @@
 require('dotenv').config();
 const express = require('express');
+const app = express();
+
+// Add Socket.IO
+const http = require('http');
+const server = http.createServer(app);
+const { Server } = require('socket.io');
+const io = new Server(server);
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const nodemailer = require('nodemailer');
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 
-const app = express();
 const PORT = process.env.PORT || 3003;
 
 // Initialize SQLite database
@@ -46,9 +52,26 @@ app.use(express.static(path.resolve(__dirname)));
 
 const indexPath = path.resolve(__dirname, 'index.html');
 
+
 // Root route to serve index.html
 app.get('/', (req, res) => {
   res.sendFile(indexPath);
+});
+
+// Socket.IO connection
+io.on('connection', (socket) => {
+  console.log('A user connected:', socket.id);
+
+  // Send current like count on connection
+  db.get(`SELECT COUNT(*) as count FROM likes`, (err, row) => {
+    if (!err && row) {
+      socket.emit('likeCount', row.count);
+    }
+  });
+
+  socket.on('disconnect', () => {
+    console.log('User disconnected:', socket.id);
+  });
 });
 
 // POST endpoint for contact form submission
@@ -90,6 +113,12 @@ app.post('/api/contact', async (req, res) => {
       console.log('Contact email sent successfully');
     } catch (error) {
       console.error('Error sending contact email:', error);
+      if (error.response) {
+        console.error('SMTP response:', error.response);
+      }
+      if (error.responseCode) {
+        console.error('SMTP response code:', error.responseCode);
+      }
     }
 
     res.json({ message: 'Contact message sent successfully!' });
@@ -173,15 +202,18 @@ app.post('/api/like', async (req, res) => {
 
       const likeCount = row.count;
 
+      // Emit updated like count to all connected clients
+      io.emit('likeCount', likeCount);
+
       try {
         const transporter = nodemailer.createTransport({
           host: 'smtp.gmail.com',
           port: 587,
           secure: false, // true for 465, false for other ports
-          auth: {
-            user: process.env.EMAIL_USER || 'kavyasiddharthan07@gmail.com',
-            pass: process.env.EMAIL_PASS || 'awjd arkv edxo rhqm'
-          },
+        auth: {
+          user: 'kavyasiddharthan07@gmail.com',
+          pass: 'bauw ohir kwsv mqiu'
+        },
           tls: {
             rejectUnauthorized: false
           }
@@ -194,17 +226,24 @@ app.post('/api/like', async (req, res) => {
           text: `Someone liked your portfolio! Total likes: ${likeCount}\n\n--- Database ID: ${this.lastID} ---`
         };
 
-        await transporter.sendMail(mailOptions);
-        console.log('Like notification email sent successfully');
-      } catch (emailError) {
-        console.error('Error sending like notification email:', emailError);
+      await transporter.sendMail(mailOptions);
+      console.log('Like notification email sent successfully');
+    } catch (emailError) {
+      console.error('Error sending like notification email:', emailError);
+      if (emailError.response) {
+        console.error('SMTP response:', emailError.response);
       }
+      if (emailError.responseCode) {
+        console.error('SMTP response code:', emailError.responseCode);
+      }
+    }
 
       res.json({ likes: likeCount });
     });
   });
 });
 
+  
 // Catch-all route to serve index.html for SPA routing
 app.use((req, res, next) => {
   if (req.path.startsWith('/api')) {
@@ -217,7 +256,16 @@ app.use((req, res, next) => {
 // Serve static files from current directory (after routes)
 app.use(express.static(__dirname));
 
-// Start server
-app.listen(PORT, () => {
+// Validate environment variables for email credentials
+function validateEnv() {
+  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+    console.warn('Warning: EMAIL_USER or EMAIL_PASS environment variables are not set. Email sending will fail.');
+  }
+}
+
+validateEnv();
+
+// Start server with Socket.IO
+server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

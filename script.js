@@ -346,17 +346,34 @@ function initContactForm() {
     const contactForm = document.querySelector('.contact-form');
     if (!contactForm) return;
     const submitButton = contactForm.querySelector('button[type="submit"]');
+
+    function validateEmail(email) {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email);
+    }
+
     contactForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const formData = new FormData(contactForm);
-        const data = {
-            name: formData.get('name'),
-            email: formData.get('email'),
-            message: formData.get('message')
-        };
+        const name = formData.get('name').trim();
+        const email = formData.get('email').trim();
+        const message = formData.get('message').trim();
+
+        // Client-side validation
+        if (!name || !email || !message) {
+            alert('Please fill in all fields: name, email, and message.');
+            return;
+        }
+        if (!validateEmail(email)) {
+            alert('Please enter a valid email address.');
+            return;
+        }
+
+        const data = { name, email, message };
+
         // Optimistic UI update: immediately update button text and disable
         if (submitButton) {
-            submitButton.textContent = 'Message Sent';
+            submitButton.textContent = 'Sending...';
             submitButton.disabled = true;
         }
         showLoading();
@@ -372,14 +389,17 @@ function initContactForm() {
             if (response.ok) {
                 hideLoading();
                 contactForm.reset();
-                // Keep button disabled and text as "Message Sent"
+                if (submitButton) {
+                    submitButton.textContent = 'Message Sent';
+                    submitButton.disabled = true;
+                }
             } else {
                 throw new Error(result.error || 'Form submission failed');
             }
         } catch (error) {
             hideLoading();
             if (submitButton) {
-                submitButton.textContent = 'Failed to Send';
+                submitButton.textContent = 'Message Not Sent';
                 submitButton.disabled = false;
                 // Optionally reset button after 3 seconds
                 setTimeout(() => {
@@ -928,6 +948,9 @@ if (localStorage.getItem("asteroidsBlasted") === "true") {
 
 // Website Like & Share functionality
 
+// Connect to Socket.IO server
+const socket = io();
+
 // Thank you popup function
 function showThankYouPopup() {
   let popup = document.createElement('div');
@@ -944,6 +967,14 @@ function showThankYouPopup() {
 let likes = 0;
 const likeBtn = document.querySelector(".like-btn");
 const likeCount = likeBtn ? likeBtn.querySelector(".like-count") : null;
+
+// Listen for real-time like count updates
+socket.on('likeCount', (count) => {
+  likes = count;
+  if (likeCount) {
+    likeCount.innerText = likes;
+  }
+});
 
 // Load initial like count from backend
 async function loadLikeCount() {
@@ -1039,7 +1070,7 @@ function showBigHeartAnimation(button) {
   heart.style.top = `${rect.top + rect.height / 2}px`;
 
   // Animate heart: float up like balloon and disappear
-  heart.style.animation = 'heartBalloon 1.5s forwards';
+  heart.style.animation = 'heartBalloon 1.5s forwards ease-out';
 
   // Remove after animation
   heart.addEventListener('animationend', () => {

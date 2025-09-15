@@ -18,9 +18,10 @@ footer {
   position: static;
   background-color: #111; /* example background */
   color: white;
-  padding: 1rem 0;
+  padding: 0.5rem 0;
   text-align: center;
   margin: 0; /* No margin to ensure it's the end */
+  font-size: 1.4rem;
 }
 
 /* Remove sticky/fixed positioning from footer to prevent it from being sticky */
