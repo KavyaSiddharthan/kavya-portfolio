@@ -15,12 +15,17 @@ body {
 footer {
   width: 100%;
   z-index: 10;
-  display: none;
+  position: static;
   background-color: #111; /* example background */
   color: white;
   padding: 1rem 0;
   text-align: center;
   margin: 0; /* No margin to ensure it's the end */
+}
+
+/* Remove sticky/fixed positioning from footer to prevent it from being sticky */
+footer {
+  position: static !important;
 }
 
 .like-btn.liked {
@@ -434,6 +439,50 @@ nav ul li a {
 .like-count {
   font-size: 14px;
   color: white;
+}
+
+/* Big Heart Animation for Like Button */
+.big-heart-animation {
+  position: fixed;
+  z-index: 10000;
+  transform: translate(-50%, -50%);
+  font-size: 2em;
+  color: #e63946;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: bold;
+}
+
+@keyframes bigHeartPop {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.5);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0;
+  }
+}
+
+@keyframes heartBalloon {
+  0% {
+    transform: translate(-50%, -50%) translateY(0) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(-50%, -150%) translateY(-30px) scale(1.2);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(-50%, -250%) translateY(-60px) scale(0.8);
+    opacity: 0;
+  }
 }
 
 

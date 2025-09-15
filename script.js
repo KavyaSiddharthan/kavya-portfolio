@@ -981,9 +981,6 @@ async function toggleLike(button) {
     heartIcon.style.color = 'white';
   }
 
-  // Show thank you popup on like
-  showThankYouPopup();
-
   // Show big heart animation like Instagram
   showBigHeartAnimation(button);
 
@@ -1033,7 +1030,7 @@ loadLikeCount();
 function showBigHeartAnimation(button) {
   const heart = document.createElement('div');
   heart.className = 'big-heart-animation';
-  heart.innerHTML = '<i class="fas fa-heart"></i><span>Thank you!</span>';
+  heart.innerHTML = '<i class="fas fa-heart"></i>';
   document.body.appendChild(heart);
 
   // Position heart at center of button
@@ -1041,8 +1038,8 @@ function showBigHeartAnimation(button) {
   heart.style.left = `${rect.left + rect.width / 2}px`;
   heart.style.top = `${rect.top + rect.height / 2}px`;
 
-  // Animate heart: scale up and fade out
-  heart.style.animation = 'bigHeartPop 1.2s forwards';
+  // Animate heart: float up like balloon and disappear
+  heart.style.animation = 'heartBalloon 1.5s forwards';
 
   // Remove after animation
   heart.addEventListener('animationend', () => {
