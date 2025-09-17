@@ -83,6 +83,7 @@ io.on('connection', (socket) => {
 // POST endpoint for contact form submission
 app.post('/api/contact', async (req, res) => {
   const { name, email, message } = req.body;
+  const userIP = req.ip || req.connection.remoteAddress || req.socket.remoteAddress || 'unknown';
   if (!name || !email || !message) {
     return res.status(400).json({ error: 'Please provide name, email, and message.' });
   }
@@ -94,6 +95,7 @@ app.post('/api/contact', async (req, res) => {
     }
     console.log(`Contact message saved to database with ID: ${this.lastID}`);
 
+    let emailSent = false;
     try {
       const transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
@@ -112,13 +114,14 @@ app.post('/api/contact', async (req, res) => {
         from: email,
         to: 'kavyasiddharthan07@gmail.com',
         subject: `New Contact Message from ${name}`,
-        text: `Name: ${name}\nEmail: ${email}\nMessage:\n${message}\n\n--- Database ID: ${this.lastID} ---`
+        text: `Name: ${name}\nEmail: ${email}\nIP: ${userIP}\nMessage:\n${message}\n\n--- Database ID: ${this.lastID} ---`
       };
 
       await transporter.sendMail(mailOptions);
       console.log('Contact email sent successfully');
+      emailSent = true;
     } catch (error) {
-      console.error('Error sending contact email:', error);
+      console.error('Error sending contact email:', error.message);
       if (error.response) {
         console.error('SMTP response:', error.response);
       }
@@ -127,12 +130,17 @@ app.post('/api/contact', async (req, res) => {
       }
     }
 
-    res.json({ message: 'Contact message sent successfully!' });
+    if (emailSent) {
+      res.json({ message: 'Contact message sent successfully!' });
+    } else {
+      res.status(500).json({ error: 'Message saved but email notification failed.' });
+    }
   });
 });
 
 app.post('/api/notes', async (req, res) => {
   const { sender, note } = req.body;
+  const userIP = req.ip || req.connection.remoteAddress || req.socket.remoteAddress || 'unknown';
   if (!sender || !note) {
     return res.status(400).json({ error: 'Please provide sender and note.' });
   }
@@ -148,6 +156,7 @@ app.post('/api/notes', async (req, res) => {
     }
     console.log(`Note saved to database with ID: ${this.lastID}`);
 
+    let emailSent = false;
     try {
       const transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
@@ -166,16 +175,27 @@ app.post('/api/notes', async (req, res) => {
         from: email,
         to: 'kavyasiddharthan07@gmail.com',
         subject: `New Note from ${name}`,
-        text: `Sender: ${name}\nEmail: ${email}\nNote:\n${note}\n\n--- Database ID: ${this.lastID} ---`
+        text: `Sender: ${name}\nEmail: ${email}\nIP: ${userIP}\nNote:\n${note}\n\n--- Database ID: ${this.lastID} ---`
       };
 
       await transporter.sendMail(mailOptions);
       console.log('Note email sent successfully');
+      emailSent = true;
     } catch (error) {
-      console.error('Error sending note email:', error);
+      console.error('Error sending note email:', error.message);
+      if (error.response) {
+        console.error('SMTP response:', error.response);
+      }
+      if (error.responseCode) {
+        console.error('SMTP response code:', error.responseCode);
+      }
     }
 
-    res.json({ message: 'Note sent successfully!' });
+    if (emailSent) {
+      res.json({ message: 'Note sent successfully!' });
+    } else {
+      res.status(500).json({ error: 'Note saved but email notification failed.' });
+    }
   });
 });
 
@@ -212,25 +232,25 @@ app.post('/api/like', async (req, res) => {
       io.emit('likeCount', likeCount);
 
       try {
-        const transporter = nodemailer.createTransport({
-          host: 'smtp.gmail.com',
-          port: 587,
-          secure: false,
-          auth: {
-            user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASS
-          },
-          tls: {
-            rejectUnauthorized: false
-          }
-        });
+      const transporter = nodemailer.createTransport({
+        host: 'smtp.gmail.com',
+        port: 587,
+        secure: false,
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS
+        },
+        tls: {
+          rejectUnauthorized: false
+        }
+      });
 
-        const mailOptions = {
-          from: process.env.EMAIL_USER,
-          to: 'kavyasiddharthan07@gmail.com',
-          subject: 'New Like on Your Portfolio!',
-          text: `Someone liked your portfolio! Total likes: ${likeCount}\n\n--- Database ID: ${this.lastID} ---`
-        };
+      const mailOptions = {
+        from: process.env.EMAIL_USER,
+        to: 'kavyasiddharthan07@gmail.com',
+        subject: 'New Like on Your Portfolio!',
+        text: `Someone liked your portfolio! Total likes: ${likeCount}\n\n--- Database ID: ${this.lastID} ---`
+      };
 
       await transporter.sendMail(mailOptions);
       console.log('Like notification email sent successfully');

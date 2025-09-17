@@ -32,6 +32,38 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Contact form submission with status messages
+    const contactForm = document.getElementById('contact-form');
+    const contactStatus = document.getElementById('contact-status');
+    if (contactForm && contactStatus) {
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+        contactStatus.textContent = '';
+            const formData = new FormData(contactForm);
+            const data = {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                message: formData.get('message')
+            };
+            try {
+                const response = await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+        if (response.ok) {
+            contactForm.reset();
+        }
+            } catch (error) {
+                console.error('Error sending message:', error);
+                contactStatus.textContent = 'Message Not Sent';
+            }
+            setTimeout(() => {
+                contactStatus.textContent = '';
+            }, 4000);
+        });
+    }
+
     // Toggle welcome text on click
     const welcomeText = document.getElementById('welcome-text');
     if (welcomeText) {
@@ -392,6 +424,12 @@ function initContactForm() {
                 if (submitButton) {
                     submitButton.textContent = 'Message Sent';
                     submitButton.disabled = true;
+                    setTimeout(() => {
+                        if (submitButton) {
+                            submitButton.textContent = 'Send Message';
+                            submitButton.disabled = false;
+                        }
+                    }, 3000);
                 }
             } else {
                 throw new Error(result.error || 'Form submission failed');
