@@ -15,37 +15,51 @@ const io = new Server(server, {
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const nodemailer = require('nodemailer');
-const sqlite3 = require('sqlite3').verbose();
+const { Pool } = require('pg');
 const path = require('path');
 
 const PORT = process.env.PORT || 3003;
 
-// Initialize SQLite database
-const db = new sqlite3.Database(path.resolve(__dirname, 'messages.db'), (err) => {
-  if (err) {
-    console.error('Error opening database:', err.message);
-  } else {
-    console.log('Connected to SQLite database.');
-    db.run(`CREATE TABLE IF NOT EXISTS contacts (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT NOT NULL,
-      email TEXT NOT NULL,
-      message TEXT NOT NULL,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    )`);
-    db.run(`CREATE TABLE IF NOT EXISTS notes (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      sender TEXT NOT NULL,
-      email TEXT NOT NULL,
-      note TEXT NOT NULL,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    )`);
-    db.run(`CREATE TABLE IF NOT EXISTS likes (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    )`);
-  }
+// Initialize PostgreSQL database
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
 });
+
+// Create tables if they don't exist
+const createTables = async () => {
+  try {
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS contacts (
+        id SERIAL PRIMARY KEY,
+        name TEXT NOT NULL,
+        email TEXT NOT NULL,
+        message TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS notes (
+        id SERIAL PRIMARY KEY,
+        sender TEXT NOT NULL,
+        email TEXT NOT NULL,
+        note TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS likes (
+        id SERIAL PRIMARY KEY,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+    console.log('PostgreSQL tables created or already exist.');
+  } catch (err) {
+    console.error('Error creating tables:', err);
+  }
+};
+
+createTables();
 
 
 // Middleware
@@ -68,10 +82,11 @@ io.on('connection', (socket) => {
   console.log('A user connected:', socket.id);
 
   // Send current like count on connection
-  db.get(`SELECT COUNT(*) as count FROM likes`, (err, row) => {
-    if (!err && row) {
-      console.log('Sending initial likeCount to socket', socket.id, ':', row.count);
-      socket.emit('likeCount', row.count);
+  pool.query('SELECT COUNT(*) as count FROM likes', (err, result) => {
+    if (!err && result.rows.length > 0) {
+      const count = result.rows[0].count;
+      console.log('Sending initial likeCount to socket', socket.id, ':', count);
+      socket.emit('likeCount', count);
     }
   });
 
@@ -88,12 +103,10 @@ app.post('/api/contact', async (req, res) => {
     return res.status(400).json({ error: 'Please provide name, email, and message.' });
   }
 
-  db.run(`INSERT INTO contacts (name, email, message) VALUES (?, ?, ?)`, [name, email, message], async function(err) {
-    if (err) {
-      console.error('Database error:', err.message);
-      return res.status(500).json({ error: 'Failed to save contact message.' });
-    }
-    console.log(`Contact message saved to database with ID: ${this.lastID}`);
+  try {
+    const result = await pool.query('INSERT INTO contacts (name, email, message) VALUES ($1, $2, $3) RETURNING id', [name, email, message]);
+    const dbId = result.rows[0].id;
+    console.log(`Contact message saved to database with ID: ${dbId}`);
 
     let emailSent = false;
     try {
@@ -114,7 +127,7 @@ app.post('/api/contact', async (req, res) => {
         from: email,
         to: 'kavyasiddharthan07@gmail.com',
         subject: `New Contact Message from ${name}`,
-        text: `Name: ${name}\nEmail: ${email}\nIP: ${userIP}\nMessage:\n${message}\n\n--- Database ID: ${this.lastID} ---`
+        text: `Name: ${name}\nEmail: ${email}\nIP: ${userIP}\nMessage:\n${message}\n\n--- Database ID: ${dbId} ---`
       };
 
       await transporter.sendMail(mailOptions);
@@ -135,7 +148,10 @@ app.post('/api/contact', async (req, res) => {
     } else {
       res.status(500).json({ error: 'Message saved but email notification failed.' });
     }
-  });
+  } catch (err) {
+    console.error('Database error:', err.message);
+    return res.status(500).json({ error: 'Failed to save contact message.' });
+  }
 });
 
 app.post('/api/notes', async (req, res) => {
@@ -149,12 +165,10 @@ app.post('/api/notes', async (req, res) => {
   const name = senderMatch ? senderMatch[1].trim() : sender;
   const email = senderMatch ? senderMatch[2].trim() : 'unknown@example.com';
 
-  db.run(`INSERT INTO notes (sender, email, note) VALUES (?, ?, ?)`, [name, email, note], async function(err) {
-    if (err) {
-      console.error('Database error:', err.message);
-      return res.status(500).json({ error: 'Failed to save note to database.' });
-    }
-    console.log(`Note saved to database with ID: ${this.lastID}`);
+  try {
+    const result = await pool.query('INSERT INTO notes (sender, email, note) VALUES ($1, $2, $3) RETURNING id', [name, email, note]);
+    const dbId = result.rows[0].id;
+    console.log(`Note saved to database with ID: ${dbId}`);
 
     let emailSent = false;
     try {
@@ -175,7 +189,7 @@ app.post('/api/notes', async (req, res) => {
         from: email,
         to: 'kavyasiddharthan07@gmail.com',
         subject: `New Note from ${name}`,
-        text: `Sender: ${name}\nEmail: ${email}\nIP: ${userIP}\nNote:\n${note}\n\n--- Database ID: ${this.lastID} ---`
+        text: `Sender: ${name}\nEmail: ${email}\nIP: ${userIP}\nNote:\n${note}\n\n--- Database ID: ${dbId} ---`
       };
 
       await transporter.sendMail(mailOptions);
@@ -196,42 +210,38 @@ app.post('/api/notes', async (req, res) => {
     } else {
       res.status(500).json({ error: 'Note saved but email notification failed.' });
     }
-  });
+  } catch (err) {
+    console.error('Database error:', err.message);
+    return res.status(500).json({ error: 'Failed to save note to database.' });
+  }
 });
 
 // GET endpoint for current like count
 app.get('/api/likes', (req, res) => {
-  db.get(`SELECT COUNT(*) as count FROM likes`, (err, row) => {
+  pool.query('SELECT COUNT(*) as count FROM likes', (err, result) => {
     if (err) {
       console.error('Database error:', err.message);
       return res.status(500).json({ error: 'Failed to get like count.' });
     }
-    res.json({ likes: row.count });
+    res.json({ likes: result.rows[0].count });
   });
 });
 
 // POST endpoint for like increment
 app.post('/api/like', async (req, res) => {
-  db.run(`INSERT INTO likes DEFAULT VALUES`, async function(err) {
-    if (err) {
-      console.error('Database error:', err.message);
-      return res.status(500).json({ error: 'Failed to save like.' });
-    }
-    console.log(`Like saved to database with ID: ${this.lastID}`);
+  try {
+    const result = await pool.query('INSERT INTO likes DEFAULT VALUES RETURNING id');
+    const dbId = result.rows[0].id;
+    console.log(`Like saved to database with ID: ${dbId}`);
 
     // Get current count
-    db.get(`SELECT COUNT(*) as count FROM likes`, async (err, row) => {
-      if (err) {
-        console.error('Database error:', err.message);
-        return res.status(500).json({ error: 'Failed to get like count.' });
-      }
+    const countResult = await pool.query('SELECT COUNT(*) as count FROM likes');
+    const likeCount = countResult.rows[0].count;
 
-      const likeCount = row.count;
+    // Emit updated like count to all connected clients
+    io.emit('likeCount', likeCount);
 
-      // Emit updated like count to all connected clients
-      io.emit('likeCount', likeCount);
-
-      try {
+    try {
       const transporter = nodemailer.createTransport({
         host: 'smtp.gmail.com',
         port: 587,
@@ -249,7 +259,7 @@ app.post('/api/like', async (req, res) => {
         from: process.env.EMAIL_USER,
         to: 'kavyasiddharthan07@gmail.com',
         subject: 'New Like on Your Portfolio!',
-        text: `Someone liked your portfolio! Total likes: ${likeCount}\n\n--- Database ID: ${this.lastID} ---`
+        text: `Someone liked your portfolio! Total likes: ${likeCount}\n\n--- Database ID: ${dbId} ---`
       };
 
       await transporter.sendMail(mailOptions);
@@ -264,9 +274,11 @@ app.post('/api/like', async (req, res) => {
       }
     }
 
-      res.json({ likes: likeCount });
-    });
-  });
+    res.json({ likes: likeCount });
+  } catch (err) {
+    console.error('Database error:', err.message);
+    return res.status(500).json({ error: 'Failed to save like.' });
+  }
 });
 
   

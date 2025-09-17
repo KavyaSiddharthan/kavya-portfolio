@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: kavya-portfolio
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        value: postgresql://postgres:kgnyzssjevtcs@db.jgzdxkfkeuexvhnhckmj.supabase.co:5432/postgres
+      - key: EMAIL_USER
+        value: kavyasiddharthan07@gmail.com
+      - key: EMAIL_PASS
+        value: xuzkgnyzssjevtcs
