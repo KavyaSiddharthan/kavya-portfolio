@@ -23,7 +23,10 @@ const PORT = process.env.PORT || 3003;
 // Initialize PostgreSQL database
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+  ssl: {
+    rejectUnauthorized: false, // required for Supabase
+    checkServerIdentity: () => undefined,
+  },
 });
 
 // Create tables if they don't exist
