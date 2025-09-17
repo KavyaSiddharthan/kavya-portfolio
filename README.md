@@ -3,7 +3,7 @@ Personal portfolio website Showcasing my journey, skills, and projects.
 
 
 ## Preview
-**Click Here**: [Kavya’s Portfolio](https://kavyasiddportfolio.onrender.com/)
+**Click Here**: [Kavya’s Portfolio](https://kavya-siddharthans-portfolio.onrender.com/)
 **Source Code**: [GitHub Repository](https://github.com/KavyaSiddharthan/kavya-portfolio)
 
 
@@ -23,7 +23,7 @@ Personal portfolio website Showcasing my journey, skills, and projects.
 
 ## Tech Stack  
 **Frontend**: HTML5, CSS3, JavaScript, Tailwind CSS  
-**Backend**: Node.js, Express.js, SQLite3  
+**Backend**: Node.js, Express.js, PostgreSQL  
 **Tools**: Nodemailer, Font Awesome, Google Fonts  
 
 ---
@@ -72,7 +72,8 @@ This project is deployed on Render. To deploy your own instance:
    - `PORT`: (optional, defaults to 3003)
 6. Deploy
 
-**Note**: Since this uses SQLite, data will not persist across deploys on Render's free tier due to ephemeral file system. For production, consider using a persistent database.
+**Note**: This project now uses PostgreSQL for persistent data storage on Render. Ensure environment variables are set accordingly.
+
 
 ---
 

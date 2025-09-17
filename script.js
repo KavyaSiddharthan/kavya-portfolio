@@ -1117,7 +1117,7 @@ function showBigHeartAnimation(button) {
 }
 
 function shareWebsite() {
-  const url = "https://kavyasiddportfolio.onrender.com"; // your site link
+  const url = "https://kavya-siddharthans-portfolio.onrender.com"; // your site link
   navigator.clipboard.writeText(url).then(() => {
     alert("Website link copied! 🎉");
   });
