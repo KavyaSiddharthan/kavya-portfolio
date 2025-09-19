@@ -16,12 +16,14 @@ footer {
   width: 100%;
   z-index: 10;
   position: static;
-  background-color: #111; /* example background */
+  background-color: #111; /* main background only */
   color: white;
   padding: 0.5rem 0;
   text-align: center;
   margin: 0; /* No margin to ensure it's the end */
-  font-size: 1.4rem;
+  font-size: 1.8rem; /* slightly bigger font */
+  border: none; /* no border */
+  box-shadow: none; /* no box shadow */
 }
 
 /* Remove sticky/fixed positioning from footer to prevent it from being sticky */
