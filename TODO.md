@@ -1,0 +1,4 @@
+- [ ] Update package.json: remove sqlite3, add pg and @sendgrid/mail
+- [ ] Update server.js: change database to PostgreSQL, change email to SendGrid
+- [ ] Run npm install for new dependencies
+- [ ] Test the server setup

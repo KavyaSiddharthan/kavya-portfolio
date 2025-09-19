@@ -14,8 +14,8 @@ const io = new Server(server, {
 });
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const nodemailer = require('nodemailer');
 const { Pool } = require('pg');
+const sgMail = require('@sendgrid/mail');
 const path = require('path');
 
 const PORT = process.env.PORT || 3003;
@@ -28,6 +28,9 @@ const pool = new Pool({
     checkServerIdentity: () => undefined,
   },
 });
+
+// Set SendGrid API key
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 // Create tables if they don't exist
 const createTables = async () => {
@@ -113,36 +116,20 @@ app.post('/api/contact', async (req, res) => {
 
     let emailSent = false;
     try {
-      const transporter = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
-        port: 587,
-        secure: false,
-        auth: {
-          user: process.env.EMAIL_USER,
-          pass: process.env.EMAIL_PASS
-        },
-        tls: {
-          rejectUnauthorized: false
-        }
-      });
-
-      const mailOptions = {
-        from: email,
+      const msg = {
         to: 'kavyasiddharthan07@gmail.com',
+        from: process.env.SENDGRID_VERIFIED_SENDER,
+        reply_to: email,
         subject: `New Contact Message from ${name}`,
-        text: `Name: ${name}\nEmail: ${email}\nIP: ${userIP}\nMessage:\n${message}\n\n--- Database ID: ${dbId} ---`
+        text: `Name: ${name}\nEmail: ${email}\nIP: ${userIP}\nMessage:\n${message}\n\n--- Database ID: ${dbId} ---`,
       };
-
-      await transporter.sendMail(mailOptions);
+      await sgMail.send(msg);
       console.log('Contact email sent successfully');
       emailSent = true;
     } catch (error) {
       console.error('Error sending contact email:', error.message);
       if (error.response) {
-        console.error('SMTP response:', error.response);
-      }
-      if (error.responseCode) {
-        console.error('SMTP response code:', error.responseCode);
+        console.error('SendGrid response:', error.response.body);
       }
     }
 
@@ -175,36 +162,20 @@ app.post('/api/notes', async (req, res) => {
 
     let emailSent = false;
     try {
-      const transporter = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
-        port: 587,
-        secure: false, // true for 465, false for other ports
-        auth: {
-          user: process.env.EMAIL_USER,
-          pass: process.env.EMAIL_PASS
-        },
-        tls: {
-          rejectUnauthorized: false
-        }
-      });
-
-      const mailOptions = {
-        from: email,
+      const msg = {
         to: 'kavyasiddharthan07@gmail.com',
+        from: process.env.SENDGRID_VERIFIED_SENDER,
+        reply_to: email,
         subject: `New Note from ${name}`,
-        text: `Sender: ${name}\nEmail: ${email}\nIP: ${userIP}\nNote:\n${note}\n\n--- Database ID: ${dbId} ---`
+        text: `Sender: ${name}\nEmail: ${email}\nIP: ${userIP}\nNote:\n${note}\n\n--- Database ID: ${dbId} ---`,
       };
-
-      await transporter.sendMail(mailOptions);
+      await sgMail.send(msg);
       console.log('Note email sent successfully');
       emailSent = true;
     } catch (error) {
       console.error('Error sending note email:', error.message);
       if (error.response) {
-        console.error('SMTP response:', error.response);
-      }
-      if (error.responseCode) {
-        console.error('SMTP response code:', error.responseCode);
+        console.error('SendGrid response:', error.response.body);
       }
     }
 
@@ -245,35 +216,18 @@ app.post('/api/like', async (req, res) => {
     io.emit('likeCount', likeCount);
 
     try {
-      const transporter = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
-        port: 587,
-        secure: false,
-        auth: {
-          user: process.env.EMAIL_USER,
-          pass: process.env.EMAIL_PASS
-        },
-        tls: {
-          rejectUnauthorized: false
-        }
-      });
-
-      const mailOptions = {
-        from: process.env.EMAIL_USER,
+      const msg = {
         to: 'kavyasiddharthan07@gmail.com',
+        from: process.env.SENDGRID_VERIFIED_SENDER,
         subject: 'New Like on Your Portfolio!',
-        text: `Someone liked your portfolio! Total likes: ${likeCount}\n\n--- Database ID: ${dbId} ---`
+        text: `Someone liked your portfolio! Total likes: ${likeCount}\n\n--- Database ID: ${dbId} ---`,
       };
-
-      await transporter.sendMail(mailOptions);
+      await sgMail.send(msg);
       console.log('Like notification email sent successfully');
     } catch (emailError) {
       console.error('Error sending like notification email:', emailError);
       if (emailError.response) {
-        console.error('SMTP response:', emailError.response);
-      }
-      if (emailError.responseCode) {
-        console.error('SMTP response code:', emailError.responseCode);
+        console.error('SendGrid response:', emailError.response.body);
       }
     }
 
@@ -299,8 +253,8 @@ app.use(express.static(__dirname));
 
 // Validate environment variables for email credentials
 function validateEnv() {
-  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-    console.warn('Warning: EMAIL_USER or EMAIL_PASS environment variables are not set. Email sending will fail.');
+  if (!process.env.SENDGRID_API_KEY || !process.env.SENDGRID_VERIFIED_SENDER) {
+    console.warn('Warning: SENDGRID_API_KEY or SENDGRID_VERIFIED_SENDER environment variables are not set. Email sending will fail.');
   }
 }
 
